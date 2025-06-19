@@ -38,6 +38,7 @@ public class Pathfinding : MonoBehaviour
 
             foreach (var item in current.Neighbors) //se pregunta para cada vecino del nodo Current
             {
+                if (item.Blocked) continue;
                 if (!cameFrom.ContainsKey(item))
                 {
                     frontier.Enqueue(item);
