@@ -7,11 +7,11 @@ public class GameManager : MonoBehaviour
 {   
     public static GameManager instance;
     public LayerMask LayerMask;
-    public Transform PlayerTransform;
+    //public Transform PlayerTransform;
 
     public Transform EnemyTransform;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (instance == null)
         {
@@ -29,18 +29,18 @@ public class GameManager : MonoBehaviour
         return !Physics.Raycast(start, dir, dir.magnitude, LayerMask);
     }
 
-    // private void Update()
-    // {
-    //     if (IsInlineOfSight(EnemyTransform.position, PlayerTransform.position))
-    //     {
-    //         Debug.Log("Esta In Line of sight");
-    //     }
-    // }
-
-    private void OnDrawGizmos()
+    private void Update()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(PlayerTransform.position, EnemyTransform.position);
+        // if (IsInlineOfSight(EnemyTransform.position, PlayerTransform.position))
+        // {
+        //     Debug.Log("Esta In Line of sight");
+        // }
     }
+
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawLine(PlayerTransform.position, EnemyTransform.position);
+    // }
     
 }

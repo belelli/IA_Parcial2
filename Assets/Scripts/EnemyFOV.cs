@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class EnemyFOV : MonoBehaviour
 {
-    [SerializeField] private Transform _target;
+    [SerializeField] public Transform Target;
     [SerializeField] private float _detectionRadius;
     [SerializeField] float _detectionAngle;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (FieldOfView(_target))
-        {
-            Debug.Log("ACA TAAAAA");
-        }
-        else
-        {
-            Debug.Log("NOPE");
-        }
-    }
+
+    // void Update()
+    // {
+    //     if (FieldOfView(Target))
+    //     {
+    //         Debug.Log("ACA TAAAAA");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("NOPE");
+    //     }
+    // }
 
     public bool FieldOfView(Transform target)
     {

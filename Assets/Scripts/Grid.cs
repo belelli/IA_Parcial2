@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _grid = new Node[_width, _height];
         for (int x = 0; x < _width; x++)
@@ -32,6 +32,31 @@ public class Grid : MonoBehaviour
         if (x < 0 || y < 0 || x >= _width || y >= _height) return null;
 
         return _grid[x, y];
+    }
+    
+    
+    
+    public Node GetClosestNode(Transform currentTransform)
+    {
+        Node closest = null;
+        float closestDistance = float.MaxValue;
+        
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                var node = GetNode(x, y);
+                if (Vector3.Distance(node.transform.position, currentTransform.position) < closestDistance)
+                {
+                    closest = node;
+                    
+                }
+
+            }
+        }
+        
+        return closest;
+        
     }
 
 }

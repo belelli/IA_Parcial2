@@ -8,11 +8,7 @@ public class Pathfinding : MonoBehaviour
     {
         var frontier = new Queue<Node>();
         frontier.Enqueue(start);
-
-
-        //var reached = new HashSet<Node>();
-        //reached.Add(start);
-
+        
         var cameFrom = new Dictionary<Node, Node>();
         cameFrom.Add(start, null);
         //Hasta aca, tenemos una Queue de nodos, y otro Hashset de nodos. a ambos le agregamos el nodo Start (el primero)
