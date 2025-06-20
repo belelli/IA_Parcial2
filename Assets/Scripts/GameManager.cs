@@ -36,11 +36,7 @@ public class GameManager : MonoBehaviour
         //     Debug.Log("Esta In Line of sight");
         // }
     }
+    
 
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawLine(PlayerTransform.position, EnemyTransform.position);
-    // }
     
 }

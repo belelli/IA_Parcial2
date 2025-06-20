@@ -18,10 +18,10 @@ public class Patrol : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(MoveBetweenWPs());
+        StartCoroutine(CycleBetweenWPs());
     }
 
-    IEnumerator MoveBetweenWPs()
+    IEnumerator CycleBetweenWPs()
     {
         _isPatrolling = true;
 
@@ -59,4 +59,9 @@ public class Patrol : MonoBehaviour
         _isPatrolling = false;
         StopAllCoroutines(); 
     }
+    //
+    // public void GoToNode()
+    // {
+    //     Pathfinding.CalculateBFS(Waypoints[0], Waypoints[5]);
+    // }
 }

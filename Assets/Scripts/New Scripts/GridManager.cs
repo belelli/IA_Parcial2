@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class NewGrid : MonoBehaviour
+public class GridManager : MonoBehaviour
 {
-    public static NewGrid instance;
+    public static GridManager instance;
     public List<NewNode> AllNodes = new List<NewNode>();
 
     private void Awake()
@@ -29,6 +29,8 @@ public class NewGrid : MonoBehaviour
     private void Start()
     {
         AssignAllNeighbors();    
+        
+        
     }
 
 
@@ -51,8 +53,7 @@ public class NewGrid : MonoBehaviour
     {
         foreach (var node in AllNodes)
         {
-            node._neighbors = GetNeighbors(node);
-            Debug.Log($"[NewGrid] Nodo {node.name} tiene {node._neighbors.Count} vecinos.");
+            node.Neighbors = GetNeighbors(node);
         }
     }
     
