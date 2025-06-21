@@ -18,8 +18,10 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField] private float _detectionRadius;
     [SerializeField] float _detectionAngle;
     public Node NodeClosestToTarget;
-    
-    
+    public Node NodeClosestToMe;
+    [SerializeField] List<Node> path = new List<Node>();
+
+
 
     //[SerializeField] private Grid _grid;
 
@@ -28,6 +30,7 @@ public class EnemyPatrol : MonoBehaviour
     {
         StartCoroutine(CycleBetweenWPs());
         EnemyManager.OnPlayerDetected += EnemyDetectionAction;
+        
     }
 
     IEnumerator CycleBetweenWPs()
@@ -45,8 +48,7 @@ public class EnemyPatrol : MonoBehaviour
                 {
                     Debug.Log("ACA TAAAAA");
                     NodeClosestToTarget = GridManager.instance.GetClosestNode(Target);
-                    //Debug.Log("el nodo mas cercano al target es " + NodeClosestToTarget.name);
-                    //NodeClosestToTarget.GetComponent<MeshRenderer>().material.color = Color.red;
+                    NodeClosestToTarget.GetComponent<MeshRenderer>().material.color = Color.red;
                     EnemyManager.OnPlayerDetected?.Invoke();
                 }
                 
@@ -78,12 +80,13 @@ public class EnemyPatrol : MonoBehaviour
 
     public void EnemyDetectionAction()
     {
+        Target = EnemyManager.instance.PlayerTransform;
         Debug.Log("Enemy Detecton Action!");
         StopPatrolling();
-        Node currentNode = GridManager.instance.GetClosestNode(transform);
-        //currentNode.GetComponent<MeshRenderer>().material.color = Color.blue;
+        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+        NodeClosestToMe.GetComponent<MeshRenderer>().material.color = Color.blue;
         //
-        List<Node> path = Path.instance.CalculateBFS(currentNode, NodeClosestToTarget);
+        path = Path.instance.CalculateBFS(NodeClosestToMe, NodeClosestToTarget);
         foreach (Node n in path)
         {
             n.GetComponent<MeshRenderer>().material.color = Color.blue;

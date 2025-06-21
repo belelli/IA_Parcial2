@@ -684,6 +684,8 @@ MonoBehaviour:
   Enemies:
   - {fileID: 1543184858}
   - {fileID: 1751723385}
+  - {fileID: 1204855967}
+  PlayerTransform: {fileID: 647339152}
 --- !u!1 &103517039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,18 +2328,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1637931079}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &594947571 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2132097653649330821, guid: d19cedba5fbaf3247a28401c39144188,
-    type: 3}
-  m_PrefabInstance: {fileID: 1637931079}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 642cc0b5f85f89f42a27b7293990c3b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &647339147
 GameObject:
   m_ObjectHideFlags: 0
@@ -4273,6 +4263,8 @@ MonoBehaviour:
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
+  NodeClosestToMe: {fileID: 0}
+  path: []
 --- !u!136 &1204855968
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4793,8 +4785,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81808b6cd0edd8243be22211f89c09c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  A: {fileID: 594947571}
-  B: {fileID: 2034886999}
+  A: {fileID: 0}
+  B: {fileID: 0}
   Nodes: []
   path: {fileID: 1001775520}
 --- !u!4 &1271173215
@@ -5571,6 +5563,8 @@ MonoBehaviour:
   _detectionRadius: 22.87
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
+  NodeClosestToMe: {fileID: 0}
+  path: []
 --- !u!136 &1543184859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6290,6 +6284,8 @@ MonoBehaviour:
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
+  NodeClosestToMe: {fileID: 0}
+  path: []
 --- !u!136 &1751723386
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7147,18 +7143,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 966680214}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2034886999 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2132097653649330821, guid: d19cedba5fbaf3247a28401c39144188,
-    type: 3}
-  m_PrefabInstance: {fileID: 966680214}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 642cc0b5f85f89f42a27b7293990c3b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2042248049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5793675722891617642, guid: d19cedba5fbaf3247a28401c39144188,

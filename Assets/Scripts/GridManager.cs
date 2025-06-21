@@ -25,7 +25,6 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         AssignAllNeighbors();    
-
     }
 
 
@@ -66,6 +65,7 @@ public class GridManager : MonoBehaviour
                 closestNode = node;
             }
         }
+        Debug.Log("en el metodo se encuentra " + closestNode.name);
         return closestNode;
     }
 

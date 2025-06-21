@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public EnemyManager instance;
+    public static EnemyManager instance;
     public List<EnemyPatrol> Enemies = new List<EnemyPatrol>();
     public static Action OnPlayerDetected;
+    public Transform PlayerTransform;
 
     private void Awake()
     {

@@ -17,14 +17,5 @@ public class Node : MonoBehaviour
             GetComponent<MeshRenderer>().material.color = Blocked ? Color.black : Color.white;
         }
     }
-    // private void OnDrawGizmos()
-    // {   
-    //     Gizmos.color = Color.green;
-    //     foreach (NewNode neighbor in Neighbors)
-    //     {
-    //         Gizmos.DrawLine(transform.position, neighbor.transform.position);
-    //         //Gizmos.DrawSphere(transform.position, 0.1f);
-    //     }
-    //     
-    // }
+
 }
