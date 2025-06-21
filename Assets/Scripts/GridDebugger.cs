@@ -7,9 +7,9 @@ public class GridDebugger : MonoBehaviour
 {
     public static GridDebugger instance;
     public Pathfinding pathfinding;
-    Node _start, _end;
+    OldNode _start, _end;
     [SerializeField] Player _player;
-    public List<Node> path;
+    public List<OldNode> path;
 
     private void Awake()
     {
@@ -36,26 +36,26 @@ public class GridDebugger : MonoBehaviour
         }
     }
 
-    public void SetStart(Node node)
+    public void SetStart(OldNode oldNode)
     {
         if(_start!= null)
         {
             _start.GetComponent<MeshRenderer>().material.color = Color.white;
         }
-        _start = node;
+        _start = oldNode;
         _start.GetComponent<MeshRenderer>().material.color = Color.red;
 
-        _player.SetInitialPosition(node);
+        _player.SetInitialPosition(oldNode);
         //_player.transform.position = new Vector3(node.transform.position.x, _player.transform.position.y, node.transform.position.z);
     }
 
-    public void SetEnd(Node node)
+    public void SetEnd(OldNode oldNode)
     {
         if (_end != null)
         {
             _end.GetComponent<MeshRenderer>().material.color = Color.white;
         }
-        _end = node;
+        _end = oldNode;
         _end.GetComponent<MeshRenderer>().material.color = Color.green;
     }
 }

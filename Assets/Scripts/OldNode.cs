@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node : MonoBehaviour
+public class OldNode : MonoBehaviour
 {
     
     int _x, _y;
     Grid _grid;
 
-    List<Node> _neighbors = new List<Node>();
+    List<OldNode> _neighbors = new List<OldNode>();
 
     public bool Blocked;
     
-    public List <Node> Neighbors
+    public List <OldNode> Neighbors
     {
         get
         {

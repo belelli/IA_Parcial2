@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    [SerializeField] Node _prefab;
+    [SerializeField] OldNode _prefab;
     [SerializeField] int _width, _height;
     [SerializeField] float _offSet;
-    Node[,] _grid;
+    OldNode[,] _grid;
 
 
     // Start is called before the first frame update
     void Awake()
     {
-        _grid = new Node[_width, _height];
+        _grid = new OldNode[_width, _height];
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
@@ -27,7 +27,7 @@ public class Grid : MonoBehaviour
     }
 
 
-    public Node GetNode(int x, int y)
+    public OldNode GetNode(int x, int y)
     {
         if (x < 0 || y < 0 || x >= _width || y >= _height) return null;
 
@@ -36,9 +36,9 @@ public class Grid : MonoBehaviour
     
     
     
-    public Node GetClosestNode(Transform currentTransform)
+    public OldNode GetClosestNode(Transform currentTransform)
     {
-        Node closest = null;
+        OldNode closest = null;
         float closestDistance = float.MaxValue;
         
         for (int x = 0; x < _width; x++)

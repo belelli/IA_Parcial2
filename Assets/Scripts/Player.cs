@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] float _speed;
     Pathfinding _path;
     public bool walking = false;
-    public Node currentNodeDestination;
+    public OldNode currentOldNodeDestination;
     public int currentIndex = 0;
     float _minDistance = 0.1f;
 
@@ -23,8 +23,8 @@ public class Player : MonoBehaviour
     {
         if (walking)
         {
-            transform.position = Vector3.MoveTowards(transform.position, currentNodeDestination.transform.position, _speed * Time.deltaTime);
-            if (Vector3.Distance(transform.position, currentNodeDestination.transform.position) < _minDistance)
+            transform.position = Vector3.MoveTowards(transform.position, currentOldNodeDestination.transform.position, _speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, currentOldNodeDestination.transform.position) < _minDistance)
             {
                 
                 currentIndex++;
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
                     walking = false;
                 }
 
-                currentNodeDestination = GridDebugger.instance.path[currentIndex];
+                currentOldNodeDestination = GridDebugger.instance.path[currentIndex];
 
             }
         }
@@ -45,14 +45,14 @@ public class Player : MonoBehaviour
         walking = true;
         Debug.Log("start trail");
         currentIndex = 0;
-        currentNodeDestination = GridDebugger.instance.path[currentIndex];
+        currentOldNodeDestination = GridDebugger.instance.path[currentIndex];
         Debug.Log("tiene" + GridDebugger.instance.path.Count);
         
     }
 
-    public void SetInitialPosition(Node node)
+    public void SetInitialPosition(OldNode oldNode)
     {
-        transform.position = new Vector3(node.transform.position.x, transform.position.y, node.transform.position.z);
+        transform.position = new Vector3(oldNode.transform.position.x, transform.position.y, oldNode.transform.position.z);
     }
 
 

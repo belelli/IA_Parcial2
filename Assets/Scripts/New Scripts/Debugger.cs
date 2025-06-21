@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Debugger : MonoBehaviour
 {
-    public NewNode A, B;
-    public List<NewNode> Nodes = new List<NewNode>();
+    public Node A, B;
+    public List<Node> Nodes = new List<Node>();
     public Path path;
     
     

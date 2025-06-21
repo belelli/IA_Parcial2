@@ -7,7 +7,7 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public static GridManager instance;
-    public List<NewNode> AllNodes = new List<NewNode>();
+    public List<Node> AllNodes = new List<Node>();
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class GridManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        AllNodes = GetComponentsInChildren<NewNode>().ToList();
+        AllNodes = GetComponentsInChildren<Node>().ToList();
                        
         
         
@@ -34,9 +34,9 @@ public class GridManager : MonoBehaviour
     }
 
 
-    public List<NewNode> GetNeighbors(NewNode currentNode)
+    public List<Node> GetNeighbors(Node currentNode)
     {
-        var neighbors = new List<NewNode>();
+        var neighbors = new List<Node>();
         foreach (var node in AllNodes)
         {
             if (node == currentNode) continue;

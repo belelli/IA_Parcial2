@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Path : MonoBehaviour
 {
-    public List<NewNode> CalculateBFS(NewNode start,NewNode end)
+    public List<Node> CalculateBFS(Node start,Node end)
     {
-        var frontier = new Queue<NewNode>();
+
+        var frontier = new Queue<Node>();
         frontier.Enqueue(start);
         
-        var cameFrom = new Dictionary<NewNode, NewNode>();
+        var cameFrom = new Dictionary<Node, Node>();
         cameFrom.Add(start, null);
         //Hasta aca, tenemos una Queue de nodos, y otro Hashset de nodos. a ambos le agregamos el nodo Start (el primero)
 
@@ -20,13 +21,14 @@ public class Path : MonoBehaviour
 
             if(current == end)
             {
-                var path = new List<NewNode>();
+                var path = new List<Node>();
                 while (current != null)
                 {
                     path.Add(current);
                     current = cameFrom[current];
                 }
                 path.Reverse();
+
                 return path;
             }
 
@@ -44,7 +46,7 @@ public class Path : MonoBehaviour
 
         }
 
-        return new List<NewNode>();
+        return new List<Node>();
 
     }
 }
