@@ -1,15 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding : MonoBehaviour
+public class Path : MonoBehaviour
 {
-    public List<OldNode> CalculateBFS(OldNode start,OldNode end)
+    public static Path instance;
+
+    private void Awake()
     {
-        var frontier = new Queue<OldNode>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public List<Node> CalculateBFS(Node start,Node end)
+    {
+
+        var frontier = new Queue<Node>();
         frontier.Enqueue(start);
         
-        var cameFrom = new Dictionary<OldNode, OldNode>();
+        var cameFrom = new Dictionary<Node, Node>();
         cameFrom.Add(start, null);
         //Hasta aca, tenemos una Queue de nodos, y otro Hashset de nodos. a ambos le agregamos el nodo Start (el primero)
 
@@ -20,13 +36,14 @@ public class Pathfinding : MonoBehaviour
 
             if(current == end)
             {
-                var path = new List<OldNode>();
+                var path = new List<Node>();
                 while (current != null)
                 {
                     path.Add(current);
                     current = cameFrom[current];
                 }
                 path.Reverse();
+
                 return path;
             }
 
@@ -44,7 +61,7 @@ public class Pathfinding : MonoBehaviour
 
         }
 
-        return new List<OldNode>();
+        return new List<Node>();
 
     }
 }

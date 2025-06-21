@@ -20,17 +20,12 @@ public class GridManager : MonoBehaviour
             Destroy(gameObject);
         }
         AllNodes = GetComponentsInChildren<Node>().ToList();
-                       
-        
-        
-        
     }
 
     private void Start()
     {
         AssignAllNeighbors();    
-        
-        
+
     }
 
 
@@ -56,8 +51,23 @@ public class GridManager : MonoBehaviour
             node.Neighbors = GetNeighbors(node);
         }
     }
-    
-    
+
+    public Node GetClosestNode(Transform target)
+    {
+        Debug.Log("busco closest node");
+        var minDistance = float.MaxValue;
+        Node closestNode = null;
+        foreach (var node in AllNodes)
+        {
+            var newDistance = Vector3.Distance(node.transform.position, target.position);
+            if (newDistance < minDistance)
+            {
+                minDistance = newDistance;
+                closestNode = node;
+            }
+        }
+        return closestNode;
+    }
 
     
 
