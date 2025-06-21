@@ -680,12 +680,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a3ba800a2196f74881640d24ad17aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance: {fileID: 0}
   Enemies:
   - {fileID: 1543184858}
   - {fileID: 1751723385}
   - {fileID: 1204855967}
   PlayerTransform: {fileID: 647339152}
+  ClosestNodeToPlayer: {fileID: 0}
 --- !u!1 &103517039
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,7 +4257,7 @@ MonoBehaviour:
   Waypoints:
   - {fileID: 45981298}
   - {fileID: 1208437801}
-  Speed: 4
+  PatrolSpeed: 2
   WaitTimeInEachWP: 0
   Target: {fileID: 647339152}
   _detectionRadius: 10
@@ -4265,6 +4265,7 @@ MonoBehaviour:
   NodeClosestToTarget: {fileID: 0}
   NodeClosestToMe: {fileID: 0}
   path: []
+  _walkToPlayerNodeSpeed: 20
 --- !u!136 &1204855968
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5557,7 +5558,7 @@ MonoBehaviour:
   - {fileID: 19938040}
   - {fileID: 285842090}
   - {fileID: 2130065699}
-  Speed: 30
+  PatrolSpeed: 30
   WaitTimeInEachWP: 0
   Target: {fileID: 647339152}
   _detectionRadius: 22.87
@@ -5565,6 +5566,7 @@ MonoBehaviour:
   NodeClosestToTarget: {fileID: 0}
   NodeClosestToMe: {fileID: 0}
   path: []
+  _walkToPlayerNodeSpeed: 20
 --- !u!136 &1543184859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6278,7 +6280,7 @@ MonoBehaviour:
   - {fileID: 1897760234}
   - {fileID: 1069949343}
   - {fileID: 992479627}
-  Speed: 4
+  PatrolSpeed: 2
   WaitTimeInEachWP: 0
   Target: {fileID: 647339152}
   _detectionRadius: 10
@@ -6286,6 +6288,7 @@ MonoBehaviour:
   NodeClosestToTarget: {fileID: 0}
   NodeClosestToMe: {fileID: 0}
   path: []
+  _walkToPlayerNodeSpeed: 20
 --- !u!136 &1751723386
 CapsuleCollider:
   m_ObjectHideFlags: 0

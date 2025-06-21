@@ -9,6 +9,7 @@ public class EnemyManager : MonoBehaviour
     public List<EnemyPatrol> Enemies = new List<EnemyPatrol>();
     public static Action OnPlayerDetected;
     public Transform PlayerTransform;
+    public Node ClosestNodeToPlayer;
 
     private void Awake()
     {
@@ -20,6 +21,14 @@ public class EnemyManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        OnPlayerDetected += UpdateClosestNodeToPlayer;
+
+    }
+    
+    void UpdateClosestNodeToPlayer()
+    {
+        Debug.Log("actualizo nodo mas cercano al jugador desde el manager");
+        ClosestNodeToPlayer = GridManager.instance.GetClosestNode(PlayerTransform);
     }
     
     
