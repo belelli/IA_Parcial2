@@ -21,7 +21,7 @@ public class EnemyFOV : MonoBehaviour
             Debug.Log("ACA TAAAAA");
             NodeClosestToTarget = GridManager.instance.GetClosestNode(Target);
             NodeClosestToTarget.GetComponent<MeshRenderer>().material.color = Color.blue;
-            EnemyManager.OnPlayerDetected?.Invoke();
+            //EnemyManager.OnPlayerDetected?.Invoke();
         }
         else
         {

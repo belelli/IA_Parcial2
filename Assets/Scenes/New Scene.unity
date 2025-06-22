@@ -685,7 +685,6 @@ MonoBehaviour:
   - {fileID: 1751723385}
   - {fileID: 1204855967}
   PlayerTransform: {fileID: 647339152}
-  ClosestNodeToPlayer: {fileID: 0}
 --- !u!1 &103517039
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,15 +4256,15 @@ MonoBehaviour:
   Waypoints:
   - {fileID: 45981298}
   - {fileID: 1208437801}
-  PatrolSpeed: 2
+  PatrolSpeed: 10
   WaitTimeInEachWP: 0
-  Target: {fileID: 647339152}
+  PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
-  NodeClosestToMe: {fileID: 0}
-  path: []
   _walkToPlayerNodeSpeed: 20
+  _pathToPlayer: []
+  NodeClosestToMe: {fileID: 0}
 --- !u!136 &1204855968
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5560,13 +5559,13 @@ MonoBehaviour:
   - {fileID: 2130065699}
   PatrolSpeed: 30
   WaitTimeInEachWP: 0
-  Target: {fileID: 647339152}
+  PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 22.87
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
-  NodeClosestToMe: {fileID: 0}
-  path: []
   _walkToPlayerNodeSpeed: 20
+  _pathToPlayer: []
+  NodeClosestToMe: {fileID: 0}
 --- !u!136 &1543184859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6280,15 +6279,15 @@ MonoBehaviour:
   - {fileID: 1897760234}
   - {fileID: 1069949343}
   - {fileID: 992479627}
-  PatrolSpeed: 2
+  PatrolSpeed: 10
   WaitTimeInEachWP: 0
-  Target: {fileID: 647339152}
+  PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
-  NodeClosestToMe: {fileID: 0}
-  path: []
   _walkToPlayerNodeSpeed: 20
+  _pathToPlayer: []
+  NodeClosestToMe: {fileID: 0}
 --- !u!136 &1751723386
 CapsuleCollider:
   m_ObjectHideFlags: 0

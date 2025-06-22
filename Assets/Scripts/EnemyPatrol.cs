@@ -1,89 +1,153 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class EnemyPatrol : MonoBehaviour
-{
+{   //PATRULLAJE
     public Transform[] Waypoints; 
-    public float PatrolSpeed = 2f; 
-    public float WaitTimeInEachWP = 1f; 
+    public float PatrolSpeed = 15f; 
+    public float WaitTimeInEachWP = 0f; 
 
-    private int _currentIndex = 0;
+    private int _currentWaypointIndex = 0;
     private bool _isPatrolling = false;
     
-    //public EnemyFOV Fov;
+    //FOV
     
-    [SerializeField] public Transform Target;
+    [SerializeField] public Transform PlayerTargetForFOV;
     [SerializeField] private float _detectionRadius;
     [SerializeField] float _detectionAngle;
     public Node NodeClosestToTarget;
-    public Node NodeClosestToMe;
-    [SerializeField] List<Node> path = new List<Node>();
+    
 
-    //
+    //PATH
+    public float _walkToPlayerNodeSpeed = 20;
+    [SerializeField] private List<Node> _pathToPlayer = new List<Node>();
     private bool _isWalkingToPlayerNode = false;
-    public float _walkToPlayerNodeSpeed;
-    private int _currentPathIndex = 0;
+    
+    private int _currentTargettedNodeIndex = 0;
 
-
+    public Node NodeClosestToMe;
     //[SerializeField] private Grid _grid;
 
 
     void Start()
     {
-        StartPatrolling();
         EnemyManager.OnPlayerDetected += EnemyDetectionAction;
-        
+        StartPatrollingState();
     }
 
-    void StartPatrolling()
+    void StartPatrollingState()
     {
         _isPatrolling = true;
+        _isWalkingToPlayerNode = false;
         StopAllCoroutines();
         StartCoroutine(CycleBetweenWPs());
+        Debug.Log("Empieza la patrulla");
     }
 
-    IEnumerator CycleBetweenWPs()
+    
+    IEnumerator CycleBetweenWPs() //PATRULLAJE
     {
         //_isPatrolling = true;
 
         while (_isPatrolling)
         {
-            Transform currentWaypoint = Waypoints[_currentIndex];
+            Transform currentWaypoint = Waypoints[_currentWaypointIndex];
             
             while (Vector3.Distance(transform.position, currentWaypoint.position) > 0.1f)
             {
    
-                if (FieldOfView(Target))
+                if (FieldOfView(PlayerTargetForFOV))
                 {
                     Debug.Log("FOV vio al player");
-                    EnemyManager.OnPlayerDetected?.Invoke();
-                    yield break;
+                    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV);
+                    yield break; //Aca corto corutina
                 }
                 
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.position, PatrolSpeed * Time.deltaTime);
                 transform.forward = currentWaypoint.position - transform.position;
-                //bool WaypointIsInFOV = Fov.FieldOfView(currentWaypoint);
                 yield return null; 
             }
 
             yield return new WaitForSeconds(WaitTimeInEachWP); //espoera en cada punto. por ahora en 0
 
-            _currentIndex++;
+            _currentWaypointIndex++;
 
-            if (_currentIndex >= Waypoints.Length)
+            if (_currentWaypointIndex >= Waypoints.Length)
             {
-                _currentIndex = 0;
+                _currentWaypointIndex = 0;
             }
         }
     }
 
-
-    public void StopPatrolling()
+    
+    
+    public void EnemyDetectionAction(Node detectedPlayerNode)
+    // Cuando el enemigo detecta al player, se ejecuta esta funcion
+    //para todas las corutinas
+    //calcula el nodo mas cerano a mi.
+    //arranca la corutina para caminar hasta el nodo del jugador
     {
         _isPatrolling = false;
+        _isWalkingToPlayerNode = false;
+        StopAllCoroutines();
+        Debug.Log("el nodo mas cerca al player es " +detectedPlayerNode.name);
+        detectedPlayerNode.GetComponent<MeshRenderer>().material.color = Color.blue; 
+        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+        _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
+        //Hasta aca joya
+
+        StopAllCoroutines();
+        StartCoroutine(WalkPathToPlayerNode(detectedPlayerNode));
+
     }
+
+
+
+    IEnumerator WalkPathToPlayerNode(Node finalTargetNode)
+    {
+        _isWalkingToPlayerNode = true;
+        _currentTargettedNodeIndex = 0;
+
+        while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count)
+        {
+            Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
+
+            Vector3 nodePosition = currentTargettedNode.transform.position;
+
+            while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
+            {
+
+                //if (FieldOfView(PlayerTargetForFOV))
+                //{
+                //    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV);
+
+                //    yield break;
+                //}
+
+                transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
+                transform.forward = nodePosition - transform.position;
+                
+                yield return null;
+            }
+            
+            Debug.Log("el enemigo " + gameObject.name + " llego al nodo " + currentTargettedNode.name);
+            _currentTargettedNodeIndex++;
+        }
+
+
+        _isWalkingToPlayerNode = false;
+
+        //bancar un segundo
+        yield return new WaitForSeconds(1f);
+
+        StartPatrollingState();
+
+
+    }
+
 
 
 
@@ -104,80 +168,15 @@ public class EnemyPatrol : MonoBehaviour
         return false;
     }
 
-    public void EnemyDetectionAction()
-    {
-        StopPatrolling();
-        PathToPlayerSetup();
-        StartCoroutine(WalkPathToPlayerNode());
-    }
-
-    IEnumerator WalkPathToPlayerNode()
-    {
-        _isWalkingToPlayerNode = true;
-        _currentPathIndex = 0;
-
-        while (_isWalkingToPlayerNode && _currentPathIndex < path.Count)
-        {
-            var currentNodeInPath = path[_currentPathIndex];
-
-            Vector3 nodePosition = currentNodeInPath.transform.position;
-
-            while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
-            {
-
-                if (FieldOfView(EnemyManager.instance.PlayerTransform))
-                {
-                    //_isWalkingToPlayerNode = false;
-                    //Debug.Log("FOV vio al player mientras caminaba a su nodo");
-                    //EnemyManager.OnPlayerDetected?.Invoke();
-                    //_isWalkingToPlayerNode = false;
-
-                    yield break;
-                }
-
-                transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
-                transform.forward = nodePosition - transform.position;
-                //bool WaypointIsInFOV = Fov.FieldOfView(currentWaypoint);
-                yield return null;
-            }
-            //Aca llegaa al currentNodeinOPath
-
-            _currentPathIndex++;
 
 
-                
-        }
-
-
-        _isWalkingToPlayerNode = false;
-
-
-        
-    }
-
-    private void PathToPlayerSetup()
-    {
-        //Path Setup
-        Target = EnemyManager.instance.PlayerTransform;
-        NodeClosestToTarget = EnemyManager.instance.ClosestNodeToPlayer;
-        Debug.Log("Enemy Detecton Action!");
-       
-        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
-        NodeClosestToMe.GetComponent<MeshRenderer>().material.color = Color.blue;
-        path = Path.instance.CalculateBFS(NodeClosestToMe, NodeClosestToTarget);
-        foreach (Node n in path)
-        {
-            n.GetComponent<MeshRenderer>().material.color = Color.blue;
-            Debug.Log(n.name);
-        }
-    }
+   
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _detectionRadius);
         Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(transform.position, Target.position);
     }
     
     
