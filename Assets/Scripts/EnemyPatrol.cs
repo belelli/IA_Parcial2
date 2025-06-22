@@ -32,6 +32,10 @@ public class EnemyPatrol : MonoBehaviour
     //[SerializeField] private Grid _grid;
 
 
+    //Chase
+    private bool _isChasingPlayer = false;
+    private Coroutine _chaseCoroutine;
+
     void Start()
     {
         EnemyManager.OnPlayerDetected += EnemyDetectionAction;
@@ -62,7 +66,7 @@ public class EnemyPatrol : MonoBehaviour
                 if (FieldOfView(PlayerTargetForFOV))
                 {
                     Debug.Log("FOV vio al player");
-                    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV);
+                    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV, this);
                     yield break; //Aca corto corutina
                 }
                 
@@ -84,24 +88,53 @@ public class EnemyPatrol : MonoBehaviour
 
     
     
-    public void EnemyDetectionAction(Node detectedPlayerNode)
+    public void EnemyDetectionAction(Node detectedPlayerNode, EnemyPatrol detector)
     // Cuando el enemigo detecta al player, se ejecuta esta funcion
     //para todas las corutinas
     //calcula el nodo mas cerano a mi.
     //arranca la corutina para caminar hasta el nodo del jugador
     {
-        _isPatrolling = false;
-        _isWalkingToPlayerNode = false;
-        StopAllCoroutines();
-        Debug.Log("el nodo mas cerca al player es " +detectedPlayerNode.name);
-        detectedPlayerNode.GetComponent<MeshRenderer>().material.color = Color.blue; 
-        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
-        _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
+        if(this == detector)
+        {
+            if (_chaseCoroutine != null) StopCoroutine(_chaseCoroutine);
+            _isChasingPlayer = true;
+            _chaseCoroutine = StartCoroutine(ChasePlayer());
+        }
+        else
+        {
+            NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+            _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
+            StartCoroutine(WalkPathToPlayerNode(detectedPlayerNode));
+        }
+
+        //    _isPatrolling = false;
+        //_isWalkingToPlayerNode = false;
+        //StopAllCoroutines();
+        //Debug.Log("el nodo mas cerca al player es " +detectedPlayerNode.name);
+        //detectedPlayerNode.GetComponent<MeshRenderer>().material.color = Color.blue; 
+        //NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+        //_pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
         //Hasta aca joya
 
-        StopAllCoroutines();
-        StartCoroutine(WalkPathToPlayerNode(detectedPlayerNode));
+    }
 
+    IEnumerator ChasePlayer()
+    {
+        while (_isChasingPlayer)
+        {
+            if (!FieldOfView(PlayerTargetForFOV))
+            {
+                // Perdió de vista al player, vuelve a patrullar
+                _isChasingPlayer = false;
+                StartPatrollingState();
+                yield break;
+            }
+
+            Vector3 playerPos = PlayerTargetForFOV.position;
+            transform.position = Vector3.MoveTowards(transform.position, playerPos, _walkToPlayerNodeSpeed * Time.deltaTime);
+            transform.forward = playerPos - transform.position;
+            yield return null;
+        }
     }
 
 

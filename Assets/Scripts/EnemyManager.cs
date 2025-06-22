@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
     public List<EnemyPatrol> Enemies = new List<EnemyPatrol>();
-    public static Action<Node> OnPlayerDetected;
+    public static Action<Node, EnemyPatrol> OnPlayerDetected;
     public Transform PlayerTransform;
 
     private void Awake()
@@ -26,12 +26,12 @@ public class EnemyManager : MonoBehaviour
     
 
 
-    public void NotifyPlayerDetected(Transform playerDetectedTransform)
+    public void NotifyPlayerDetected(Transform playerDetectedTransform, EnemyPatrol detector)
     {
         Node detectedPlayerNode = GridManager.instance.GetClosestNode(playerDetectedTransform);
         if (detectedPlayerNode != null)
         {
-            OnPlayerDetected?.Invoke(detectedPlayerNode);
+            OnPlayerDetected?.Invoke(detectedPlayerNode, detector);
         }
     }
     
