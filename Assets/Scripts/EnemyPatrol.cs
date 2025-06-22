@@ -104,7 +104,7 @@ public class EnemyPatrol : MonoBehaviour
         {
             NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
             _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
-            StartCoroutine(WalkPathToPlayerNode(detectedPlayerNode));
+            StartCoroutine(WalkPathToNode(detectedPlayerNode));
         }
 
         //    _isPatrolling = false;
@@ -139,7 +139,7 @@ public class EnemyPatrol : MonoBehaviour
 
 
 
-    IEnumerator WalkPathToPlayerNode(Node finalTargetNode)
+    IEnumerator WalkPathToNode(Node finalTargetNode)
     {
         _isWalkingToPlayerNode = true;
         _currentTargettedNodeIndex = 0;
@@ -152,13 +152,6 @@ public class EnemyPatrol : MonoBehaviour
 
             while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
             {
-
-                //if (FieldOfView(PlayerTargetForFOV))
-                //{
-                //    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV);
-
-                //    yield break;
-                //}
 
                 transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
                 transform.forward = nodePosition - transform.position;
@@ -176,12 +169,44 @@ public class EnemyPatrol : MonoBehaviour
         //bancar un segundo
         yield return new WaitForSeconds(1f);
 
-        StartPatrollingState();
+        // Si no ve al jugador, vuelve al primer waypoint usando pathfinding
+        if (!FieldOfView(PlayerTargetForFOV))
+        {
+            yield return StartCoroutine(ReturnToFirstWaypoint());
+        }
+
 
 
     }
 
 
+    private IEnumerator ReturnToFirstWaypoint()
+    {
+        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+        Node firstWaypointNode = GridManager.instance.GetClosestNode(Waypoints[0]);
+        _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, firstWaypointNode);
+
+        _isWalkingToPlayerNode = true;
+        _currentTargettedNodeIndex = 0;
+
+        while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count)
+        {
+            Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
+            Vector3 nodePosition = currentTargettedNode.transform.position;
+
+            while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
+                transform.forward = nodePosition - transform.position;
+                yield return null;
+            }
+            _currentTargettedNodeIndex++;
+        }
+
+        _isWalkingToPlayerNode = false;
+        _currentWaypointIndex = 0; // Empieza patrulla desde el primer waypoint
+        StartPatrollingState();
+    }
 
 
 
