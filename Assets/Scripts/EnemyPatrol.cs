@@ -11,7 +11,7 @@ public class EnemyPatrol : MonoBehaviour
     public float WaitTimeInEachWP = 0f; 
 
     private int _currentWaypointIndex = 0;
-    private bool _isPatrolling = false;
+    [SerializeField] private bool _isPatrolling = false;
     
     //FOV
     
@@ -24,7 +24,7 @@ public class EnemyPatrol : MonoBehaviour
     //PATH
     public float _walkToPlayerNodeSpeed = 20;
     [SerializeField] private List<Node> _pathToPlayer = new List<Node>();
-    private bool _isWalkingToPlayerNode = false;
+    [SerializeField] private bool _isWalkingToPlayerNode = false;
     
     private int _currentTargettedNodeIndex = 0;
 
@@ -33,7 +33,7 @@ public class EnemyPatrol : MonoBehaviour
 
 
     //Chase
-    private bool _isChasingPlayer = false;
+    [SerializeField] private bool _isChasingPlayer = false;
     private Coroutine _chaseCoroutine;
 
     void Start()
@@ -47,15 +47,13 @@ public class EnemyPatrol : MonoBehaviour
         _isPatrolling = true;
         _isWalkingToPlayerNode = false;
         StopAllCoroutines();
-        StartCoroutine(CycleBetweenWPs());
+        StartCoroutine(PatrolBetweenWPs());
         Debug.Log("Empieza la patrulla");
     }
 
     
-    IEnumerator CycleBetweenWPs() //PATRULLAJE
+    IEnumerator PatrolBetweenWPs() //PATRULLAJE
     {
-        //_isPatrolling = true;
-
         while (_isPatrolling)
         {
             Transform currentWaypoint = Waypoints[_currentWaypointIndex];
@@ -90,20 +88,20 @@ public class EnemyPatrol : MonoBehaviour
     
     public void EnemyDetectionAction(Node detectedPlayerNode, EnemyPatrol detector)
     // Cuando el enemigo detecta al player, se ejecuta esta funcion
-    //para todas las corutinas
     //calcula el nodo mas cerano a mi.
-    //arranca la corutina para caminar hasta el nodo del jugador
+    //arranca la corutina para caminar hasta el nodo mas cercano al jugador
     {
+        _isPatrolling = false;
         if(this == detector)
         {
-            if (_chaseCoroutine != null) StopCoroutine(_chaseCoroutine);
+            //if (_chaseCoroutine != null) StopCoroutine(_chaseCoroutine);
             _isChasingPlayer = true;
             _chaseCoroutine = StartCoroutine(ChasePlayer());
         }
         else
         {
             NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
-            _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
+            _pathToPlayer = Path.instance.Astar(NodeClosestToMe, detectedPlayerNode);
             StartCoroutine(WalkPathToNode(detectedPlayerNode));
         }
 
@@ -114,7 +112,7 @@ public class EnemyPatrol : MonoBehaviour
         //detectedPlayerNode.GetComponent<MeshRenderer>().material.color = Color.blue; 
         //NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
         //_pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
-        //Hasta aca joya
+        
 
     }
 
@@ -164,7 +162,7 @@ public class EnemyPatrol : MonoBehaviour
         }
 
 
-        _isWalkingToPlayerNode = false;
+        //_isWalkingToPlayerNode = false;
 
         //bancar un segundo
         yield return new WaitForSeconds(1f);
@@ -184,7 +182,7 @@ public class EnemyPatrol : MonoBehaviour
     {
         NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
         Node firstWaypointNode = GridManager.instance.GetClosestNode(Waypoints[0]);
-        _pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, firstWaypointNode);
+        _pathToPlayer = Path.instance.Astar(NodeClosestToMe, firstWaypointNode);
 
         _isWalkingToPlayerNode = true;
         _currentTargettedNodeIndex = 0;
@@ -196,7 +194,7 @@ public class EnemyPatrol : MonoBehaviour
 
             while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, nodePosition, PatrolSpeed * Time.deltaTime);
                 transform.forward = nodePosition - transform.position;
                 yield return null;
             }

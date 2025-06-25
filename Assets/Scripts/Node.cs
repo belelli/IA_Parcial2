@@ -7,7 +7,7 @@ public class Node : MonoBehaviour
 {
     public List<Node> Neighbors = new List<Node>();
     public bool Blocked;
-    public int Cost = 1;
+    public float Cost = 1f;
     
     
     private void OnTriggerEnter(Collider other)

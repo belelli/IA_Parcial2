@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PriorityQueue 
 {
-    Dictionary<Node, int> _allNodes = new Dictionary<Node, int>();
+    Dictionary<Node, float> _allNodes = new Dictionary<Node, float>();
 
     public int Count
     {
         get { return _allNodes.Count; }
     }
-    public void Enqueue(Node node, int cost)
+    public void Enqueue(Node node, float cost)
     {
         if (_allNodes.ContainsKey(node))
         {
@@ -28,7 +28,7 @@ public class PriorityQueue
             return null;
 
         Node minCostNode = null;
-        int minCost = int.MaxValue;
+        float minCost = int.MaxValue;
         foreach (var node in _allNodes)
         {
             if (node.Value < minCost)
