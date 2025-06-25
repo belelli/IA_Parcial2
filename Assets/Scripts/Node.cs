@@ -10,13 +10,13 @@ public class Node : MonoBehaviour
     public float Cost = 1f;
     
     
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == 3)
-        {
-            Blocked = true;
-            GetComponent<MeshRenderer>().material.color = Blocked ? Color.black : Color.white;
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.layer == 3)
+    //    {
+    //        Blocked = true;
+    //        GetComponent<MeshRenderer>().material.color = Blocked ? Color.black : Color.white;
+    //    }
+    //}
 
 }

@@ -5,7 +5,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class EnemyPatrol : MonoBehaviour
-{   //PATRULLAJE
+{   
+
+    
+    //PATRULLAJE
     public Transform[] Waypoints; 
     public float PatrolSpeed = 15f; 
     public float WaitTimeInEachWP = 0f; 
@@ -35,7 +38,10 @@ public class EnemyPatrol : MonoBehaviour
 
     //Chase
     [SerializeField] private bool _isChasingPlayer = false;
-    [SerializeField] private bool _isReturningToPatrol = false; 
+    [SerializeField] private bool _isReturningToPatrol = false;
+
+    //corutinas
+    private Coroutine _returnToPatrolCoroutine;
     private Coroutine _chaseCoroutine;
 
     void Start()
@@ -132,45 +138,7 @@ public class EnemyPatrol : MonoBehaviour
 
 
 
-    //IEnumerator WalkPathToPlayerNode(Node finalTargetNode) //Usa Pathfinding para ir al nodo mas cercano al player
-    //{
-    //    _isWalkingToPlayerNode = true;
-    //    _currentTargettedNodeIndex = 0;
 
-    //    while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count -1)
-    //    {
-    //        Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
-
-    //        Vector3 nodePosition = currentTargettedNode.transform.position;
-
-    //        while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
-    //        {
-
-    //            transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
-    //            transform.forward = nodePosition - transform.position;
-
-    //            yield return null;
-    //        }
-
-    //        Debug.Log("el enemigo " + gameObject.name + " llego al nodo " + currentTargettedNode.name);
-    //        _currentTargettedNodeIndex++;
-    //    }
-
-
-    //    _isWalkingToPlayerNode = false;
-
-    //    //bancar un segundo
-    //    yield return new WaitForSeconds(1f);
-
-    //    // Si no ve al jugador, vuelve al primer waypoint usando pathfinding
-    //    if (!FieldOfView(PlayerTargetForFOV))
-    //    {
-    //        yield return StartCoroutine(ReturnToFirstWaypoint());
-    //    }
-
-
-
-    //}
     IEnumerator WalkPathToPlayerNode(Node finalTargetNode) //Usa Pathfinding para ir al nodo mas cercano al player
     {
         _isWalkingToPlayerNode = true;
@@ -208,7 +176,17 @@ public class EnemyPatrol : MonoBehaviour
         // Si no ve al jugador, vuelve al primer waypoint usando pathfinding
         if (!FieldOfView(PlayerTargetForFOV))
         {
-            yield return StartCoroutine(ReturnToFirstWaypoint());
+            //
+            if (_isReturningToPatrol)
+            {
+                Debug.Log($"{gameObject.name} - Ya está retornando a patrulla, ignora nueva llamada.");
+                yield break;
+            }
+
+            if (_returnToPatrolCoroutine != null)
+                StopCoroutine(_returnToPatrolCoroutine);
+            _returnToPatrolCoroutine = StartCoroutine(ReturnToFirstWaypoint());
+            //yield return StartCoroutine(ReturnToFirstWaypoint());
         }
 
 
@@ -216,7 +194,8 @@ public class EnemyPatrol : MonoBehaviour
     }
 
     private IEnumerator ReturnToFirstWaypoint()
-    {
+    {   
+        _isWalkingToPlayerNode = false;
         _isReturningToPatrol = true;
         NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
         Node firstWaypointNode = GridManager.instance.GetClosestNode(Waypoints[0]);
@@ -228,11 +207,13 @@ public class EnemyPatrol : MonoBehaviour
 
 
         while (_isReturningToPatrol && index < _pathToFirstWP.Count)
-        {
+        {   
+            Debug.Log("el path de "+ this.name+ "tiene " + _pathToFirstWP.Count + " nodos");
+            Debug.Log("El index de return to patrol de " + this.name  +"es "+ index);
             Node currentTargettedNode = _pathToFirstWP[index];
             Vector3 nodePosition = currentTargettedNode.transform.position;
 
-            while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
+            while (Vector3.Distance(transform.position, nodePosition) > 0.3f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, nodePosition, PatrolSpeed * Time.deltaTime);
                 transform.forward = nodePosition - transform.position;
