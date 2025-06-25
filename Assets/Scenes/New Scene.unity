@@ -4258,13 +4258,18 @@ MonoBehaviour:
   - {fileID: 1208437801}
   PatrolSpeed: 10
   WaitTimeInEachWP: 0
+  _isPatrolling: 0
   PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
   _walkToPlayerNodeSpeed: 20
   _pathToPlayer: []
+  _pathToFirstWP: []
+  _isWalkingToPlayerNode: 0
   NodeClosestToMe: {fileID: 0}
+  _isChasingPlayer: 0
+  _isReturningToPatrol: 0
 --- !u!136 &1204855968
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5557,15 +5562,20 @@ MonoBehaviour:
   - {fileID: 19938040}
   - {fileID: 285842090}
   - {fileID: 2130065699}
-  PatrolSpeed: 30
+  PatrolSpeed: 6
   WaitTimeInEachWP: 0
+  _isPatrolling: 0
   PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 22.87
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
   _walkToPlayerNodeSpeed: 20
   _pathToPlayer: []
+  _pathToFirstWP: []
+  _isWalkingToPlayerNode: 0
   NodeClosestToMe: {fileID: 0}
+  _isChasingPlayer: 0
+  _isReturningToPatrol: 0
 --- !u!136 &1543184859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6281,13 +6291,18 @@ MonoBehaviour:
   - {fileID: 992479627}
   PatrolSpeed: 10
   WaitTimeInEachWP: 0
+  _isPatrolling: 0
   PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 10
   _detectionAngle: 40
   NodeClosestToTarget: {fileID: 0}
   _walkToPlayerNodeSpeed: 20
   _pathToPlayer: []
+  _pathToFirstWP: []
+  _isWalkingToPlayerNode: 0
   NodeClosestToMe: {fileID: 0}
+  _isChasingPlayer: 0
+  _isReturningToPatrol: 0
 --- !u!136 &1751723386
 CapsuleCollider:
   m_ObjectHideFlags: 0

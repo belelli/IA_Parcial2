@@ -24,6 +24,7 @@ public class EnemyPatrol : MonoBehaviour
     //PATH
     public float _walkToPlayerNodeSpeed = 20;
     [SerializeField] private List<Node> _pathToPlayer = new List<Node>();
+    [SerializeField] private List<Node> _pathToFirstWP = new List<Node>();
     [SerializeField] private bool _isWalkingToPlayerNode = false;
     
     private int _currentTargettedNodeIndex = 0;
@@ -34,6 +35,7 @@ public class EnemyPatrol : MonoBehaviour
 
     //Chase
     [SerializeField] private bool _isChasingPlayer = false;
+    [SerializeField] private bool _isReturningToPatrol = false; 
     private Coroutine _chaseCoroutine;
 
     void Start()
@@ -84,8 +86,8 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
 
-    
-    
+
+
     public void EnemyDetectionAction(Node detectedPlayerNode, EnemyPatrol detector)
     // Cuando el enemigo detecta al player, se ejecuta esta funcion
     //calcula el nodo mas cerano a mi.
@@ -102,17 +104,10 @@ public class EnemyPatrol : MonoBehaviour
         {
             NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
             _pathToPlayer = Path.instance.Astar(NodeClosestToMe, detectedPlayerNode);
-            StartCoroutine(WalkPathToNode(detectedPlayerNode));
+            StartCoroutine(WalkPathToPlayerNode(detectedPlayerNode));
         }
 
-        //    _isPatrolling = false;
-        //_isWalkingToPlayerNode = false;
-        //StopAllCoroutines();
-        //Debug.Log("el nodo mas cerca al player es " +detectedPlayerNode.name);
-        //detectedPlayerNode.GetComponent<MeshRenderer>().material.color = Color.blue; 
-        //NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
-        //_pathToPlayer = Path.instance.CalculateBFS(NodeClosestToMe, detectedPlayerNode);
-        
+
 
     }
 
@@ -137,14 +132,57 @@ public class EnemyPatrol : MonoBehaviour
 
 
 
-    IEnumerator WalkPathToNode(Node finalTargetNode)
+    //IEnumerator WalkPathToPlayerNode(Node finalTargetNode) //Usa Pathfinding para ir al nodo mas cercano al player
+    //{
+    //    _isWalkingToPlayerNode = true;
+    //    _currentTargettedNodeIndex = 0;
+
+    //    while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count -1)
+    //    {
+    //        Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
+
+    //        Vector3 nodePosition = currentTargettedNode.transform.position;
+
+    //        while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
+    //        {
+
+    //            transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
+    //            transform.forward = nodePosition - transform.position;
+
+    //            yield return null;
+    //        }
+
+    //        Debug.Log("el enemigo " + gameObject.name + " llego al nodo " + currentTargettedNode.name);
+    //        _currentTargettedNodeIndex++;
+    //    }
+
+
+    //    _isWalkingToPlayerNode = false;
+
+    //    //bancar un segundo
+    //    yield return new WaitForSeconds(1f);
+
+    //    // Si no ve al jugador, vuelve al primer waypoint usando pathfinding
+    //    if (!FieldOfView(PlayerTargetForFOV))
+    //    {
+    //        yield return StartCoroutine(ReturnToFirstWaypoint());
+    //    }
+
+
+
+    //}
+    IEnumerator WalkPathToPlayerNode(Node finalTargetNode) //Usa Pathfinding para ir al nodo mas cercano al player
     {
         _isWalkingToPlayerNode = true;
         _currentTargettedNodeIndex = 0;
+        int index = 0;
 
-        while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count)
+        NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
+        _pathToPlayer = Path.instance.Astar(NodeClosestToMe, finalTargetNode);
+
+        while (_isWalkingToPlayerNode && index < _pathToPlayer.Count)
         {
-            Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
+            Node currentTargettedNode = _pathToPlayer[index];
 
             Vector3 nodePosition = currentTargettedNode.transform.position;
 
@@ -153,16 +191,16 @@ public class EnemyPatrol : MonoBehaviour
 
                 transform.position = Vector3.MoveTowards(transform.position, nodePosition, _walkToPlayerNodeSpeed * Time.deltaTime);
                 transform.forward = nodePosition - transform.position;
-                
+
                 yield return null;
             }
+
             
-            Debug.Log("el enemigo " + gameObject.name + " llego al nodo " + currentTargettedNode.name);
-            _currentTargettedNodeIndex++;
+            index++;
         }
 
 
-        //_isWalkingToPlayerNode = false;
+        _isWalkingToPlayerNode = false;
 
         //bancar un segundo
         yield return new WaitForSeconds(1f);
@@ -177,19 +215,21 @@ public class EnemyPatrol : MonoBehaviour
 
     }
 
-
     private IEnumerator ReturnToFirstWaypoint()
     {
+        _isReturningToPatrol = true;
         NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
         Node firstWaypointNode = GridManager.instance.GetClosestNode(Waypoints[0]);
-        _pathToPlayer = Path.instance.Astar(NodeClosestToMe, firstWaypointNode);
+        _pathToFirstWP = Path.instance.Astar(NodeClosestToMe, firstWaypointNode);
 
-        _isWalkingToPlayerNode = true;
-        _currentTargettedNodeIndex = 0;
+        //_isWalkingToPlayerNode = true;
+        //_currentTargettedNodeIndex = 0;
+        var index = 0;
 
-        while (_isWalkingToPlayerNode && _currentTargettedNodeIndex < _pathToPlayer.Count)
+
+        while (_isReturningToPatrol && index < _pathToFirstWP.Count)
         {
-            Node currentTargettedNode = _pathToPlayer[_currentTargettedNodeIndex];
+            Node currentTargettedNode = _pathToFirstWP[index];
             Vector3 nodePosition = currentTargettedNode.transform.position;
 
             while (Vector3.Distance(transform.position, nodePosition) > 0.1f)
@@ -198,10 +238,10 @@ public class EnemyPatrol : MonoBehaviour
                 transform.forward = nodePosition - transform.position;
                 yield return null;
             }
-            _currentTargettedNodeIndex++;
+            index++;
         }
 
-        _isWalkingToPlayerNode = false;
+        _isReturningToPatrol = false;
         _currentWaypointIndex = 0; // Empieza patrulla desde el primer waypoint
         StartPatrollingState();
     }
