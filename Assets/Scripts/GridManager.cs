@@ -65,7 +65,7 @@ public class GridManager : MonoBehaviour
                 closestNode = node;
             }
         }
-        Debug.Log("en el metodo se encuentra " + closestNode.name);
+        //Debug.Log("en el metodo se encuentra " + closestNode.name);
         return closestNode;
     }
 

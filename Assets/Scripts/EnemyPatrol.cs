@@ -59,9 +59,6 @@ public class EnemyPatrol : MonoBehaviour
     {
         _isPatrolling = true;
         _isWalkingToPlayerNode = false;
-        //StopAllCoroutines();
-        Debug.Log("Empieza la patrulla" + this.name);
-
         if (_CoroutineActive != null)
             StopCoroutine(_CoroutineActive);
 
@@ -111,7 +108,6 @@ public class EnemyPatrol : MonoBehaviour
         _isPatrolling = false;
         if (this == detector)
         {
-            //if (_chaseCoroutine != null) StopCoroutine(_chaseCoroutine);
             _isChasingPlayer = true;
             if (_CoroutineActive != null)
                 StopCoroutine(_CoroutineActive);
@@ -119,7 +115,6 @@ public class EnemyPatrol : MonoBehaviour
         }
         else if (!_isWalkingToPlayerNode)
         {
-            Debug.Log("Calculo path");
             NodeClosestToMe = GridManager.instance.GetClosestNode(transform);
             _pathToPlayer = Path.instance.Astar(NodeClosestToMe, detectedPlayerNode);
 
@@ -142,8 +137,12 @@ public class EnemyPatrol : MonoBehaviour
             {
                 // Perdió de vista al player, vuelve a patrullar
                 _isChasingPlayer = false;
-                StartPatrollingState();
-                yield break;
+                //StartPatrollingState();
+                if (_CoroutineActive != null)
+                    StopCoroutine(_CoroutineActive);
+
+                _CoroutineActive = StartCoroutine(ReturnToFirstWaypoint());
+
             }
 
             Vector3 playerPos = PlayerTargetForFOV.position;
@@ -181,6 +180,16 @@ public class EnemyPatrol : MonoBehaviour
                 transform.position = Vector3.MoveTowards(initialPos, nodePosition, t);
                 transform.forward = nodePosition - transform.position;
 
+
+                //busca al jugador con FOV
+                if (FieldOfView(PlayerTargetForFOV))
+                {
+                    Debug.Log("FOV vio al player");
+                    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV, this);
+                    yield break; //Aca corto corutina
+                }
+
+
                 yield return null;
             }
 
@@ -192,23 +201,16 @@ public class EnemyPatrol : MonoBehaviour
         _isWalkingToPlayerNode = false;
 
         //bancar un segundo
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
         // Si no ve al jugador, vuelve al primer waypoint usando pathfinding
         if (!FieldOfView(PlayerTargetForFOV))
         {
-            //
-            if (_isReturningToPatrol)
-            {
-                //Debug.Log($"{gameObject.name} - Ya está retornando a patrulla, ignora nueva llamada.");
-                //yield break;
-            }
-
             if (_CoroutineActive != null)
                 StopCoroutine(_CoroutineActive);
 
             _CoroutineActive = StartCoroutine(ReturnToFirstWaypoint());
-            //yield return StartCoroutine(ReturnToFirstWaypoint());
+            
         }
 
 
@@ -244,6 +246,17 @@ public class EnemyPatrol : MonoBehaviour
                 transform.position = Vector3.MoveTowards(initialPos, nodePosition, t);
                 transform.forward = nodePosition - transform.position;
 
+                
+                //busca al jugador con FOV
+                if (FieldOfView(PlayerTargetForFOV))
+                {
+                    Debug.Log("FOV vio al player");
+                    EnemyManager.instance.NotifyPlayerDetected(PlayerTargetForFOV, this);
+                    yield break; //Aca corto corutina
+                }
+
+
+
                 yield return null;
             }
             index++;
@@ -272,6 +285,17 @@ public class EnemyPatrol : MonoBehaviour
         return false;
     }
 
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _detectionRadius);
+        Gizmos.color = Color.green;
+        Vector3 leftBoundary = Quaternion.Euler(0, -_detectionAngle * 0.5f, 0) * transform.forward * _detectionRadius;
+        Vector3 rightBoundary = Quaternion.Euler(0, _detectionAngle * 0.5f, 0) * transform.forward * _detectionRadius;
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
+    }
 
 
 }

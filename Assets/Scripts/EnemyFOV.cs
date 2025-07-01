@@ -14,27 +14,25 @@ public class EnemyFOV : MonoBehaviour
     private Node _enemyCurrentNode; // El nodo actual del enemigo
 
 
-    void Update()
-    {
-        if (FieldOfView(Target))
-        {
-            Debug.Log("ACA TAAAAA");
-            NodeClosestToTarget = GridManager.instance.GetClosestNode(Target);
-            NodeClosestToTarget.GetComponent<MeshRenderer>().material.color = Color.blue;
-            //EnemyManager.OnPlayerDetected?.Invoke();
-        }
-        else
-        {
-            Debug.Log("NOPE");
-        }
+    //void Update()
+    //{
+    //    if (FieldOfView(Target))
+    //    {
+    //        NodeClosestToTarget = GridManager.instance.GetClosestNode(Target);
+    //        NodeClosestToTarget.GetComponent<MeshRenderer>().material.color = Color.blue;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("NOPE");
+    //    }
 
-        if (FieldOfView(Target))
-        {
+    //    if (FieldOfView(Target))
+    //    {
             
-        }
+    //    }
         
         
-    }
+    //}
 
     public bool FieldOfView(Transform target)
     {

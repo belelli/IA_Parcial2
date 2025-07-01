@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -596,8 +596,8 @@ Transform:
   m_GameObject: {fileID: 166717447}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071071, z: -0, w: 0.7071065}
-  m_LocalPosition: {x: -4.7, y: 0, z: -9.3}
-  m_LocalScale: {x: 14.899169, y: 7.5669417, z: 1}
+  m_LocalPosition: {x: -8.5, y: 0, z: -10.2}
+  m_LocalScale: {x: 19.456825, y: 7.5669417, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 16216452}
@@ -751,8 +751,8 @@ Transform:
   m_GameObject: {fileID: 203076884}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25.7, y: 2.2, z: -3.9}
-  m_LocalScale: {x: 12.970427, y: 7.5669417, z: 1}
+  m_LocalPosition: {x: 24.64, y: 2.2, z: -9.33}
+  m_LocalScale: {x: 18.688164, y: 7.5669417, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 16216452}
@@ -1968,7 +1968,7 @@ Transform:
   m_GameObject: {fileID: 1041773062}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28.3, y: 2.2, z: -5.64}
+  m_LocalPosition: {x: -29.1, y: 2.2, z: -5.64}
   m_LocalScale: {x: 12.970427, y: 7.5669417, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2951,7 +2951,7 @@ MonoBehaviour:
   PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 22.87
   _detectionAngle: 40
-  _walkToPlayerNodeSpeed: 20
+  _walkToPlayerNodeSpeed: 10
   _pathToPlayer: []
   _pathToFirstWP: []
   _isWalkingToPlayerNode: 0
@@ -3104,6 +3104,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8575658863494696021, guid: d19cedba5fbaf3247a28401c39144188,
+        type: 3}
+      propertyPath: Cost
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3208,6 +3213,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8575658863494696021, guid: d19cedba5fbaf3247a28401c39144188,
+        type: 3}
+      propertyPath: Cost
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3270,7 +3280,7 @@ MonoBehaviour:
   PlayerTargetForFOV: {fileID: 647339152}
   _detectionRadius: 10
   _detectionAngle: 40
-  _walkToPlayerNodeSpeed: 20
+  _walkToPlayerNodeSpeed: 10
   _pathToPlayer: []
   _pathToFirstWP: []
   _isWalkingToPlayerNode: 0
