@@ -23,7 +23,7 @@ public class EnemyManager : MonoBehaviour
         //OnPlayerDetected += UpdateClosestNodeToPlayer;
 
     }
-    
+
 
 
     public void NotifyPlayerDetected(Transform playerDetectedTransform, EnemyPatrol detector)

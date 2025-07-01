@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     public bool IsInlineOfSight(Vector3 start, Vector3 end)
     {
         

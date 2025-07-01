@@ -25,6 +25,7 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         AssignAllNeighbors();    
+        
     }
 
 

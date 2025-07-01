@@ -20,6 +20,8 @@ public class Path : MonoBehaviour
         }
     }
 
+
+
     public List<Node> CalculateBFS(Node start,Node end)
     {
 
